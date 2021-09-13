@@ -1,0 +1,130 @@
+#for Disable Directory Browsing
+Options All -Indexes
+
+# Ultimate htaccess Blacklist 2 from Perishable Press
+# Deny domain access to spammers and other scumbags
+RewriteEngine on
+RewriteBase /
+RewriteCond %{HTTP_USER_AGENT} ADSARobot|ah-ha|almaden|aktuelles|Anarchie|amzn_assoc|ASPSeek|ASSORT|ATHENS|Atomz|attach|attache|autoemailspider|BackWeb|Bandit|BatchFTP|bdfetch|big.brother|BlackWidow|bmclient|Boston\ Project|BravoBrian\ SpiderEngine\ MarcoPolo|Bot\ mailto:craftbot@yahoo.com|Buddy|Bullseye|bumblebee|capture|CherryPicker|ChinaClaw|CICC|clipping|Collector|Copier|Crescent|Crescent\ Internet\ ToolPak|Custo|cyberalert|DA$|Deweb|diagem|Digger|Digimarc|DIIbot|DISCo|DISCo\ Pump|DISCoFinder|Download\ Demon|Download\ Wonder|Downloader|Drip|DSurf15a|DTS.Agent|EasyDL|eCatch|ecollector|efp@gmx\.net|Email\ Extractor|EirGrabber|email|EmailCollector|EmailSiphon|EmailWolf|Express\ WebPictures|ExtractorPro|EyeNetIE|FavOrg|fastlwspider|Favorites\ Sweeper|Fetch|FEZhead|FileHound|FlashGet\ WebWasher|FlickBot|fluffy|FrontPage|GalaxyBot|Generic|Getleft|GetRight|GetSmart|GetWeb!|GetWebPage|gigabaz|Girafabot|Go\!Zilla|Go!Zilla|Go-Ahead-Got-It|GornKer|gotit|Grabber|GrabNet|Grafula|Green\ Research|grub-client|Harvest|hhjhj@yahoo|hloader|HMView|HomePageSearch|http\ generic|HTTrack|httpdown|httrack|ia_archiver|IBM_Planetwide|Image\ Stripper|Image\ Sucker|imagefetch|IncyWincy|Indy*Library|Indy\ Library|informant|Ingelin|InterGET|Internet\ Ninja|InternetLinkagent|Internet\ Ninja|InternetSeer\.com|Iria|Irvine|JBH*agent|JetCar|JOC|JOC\ Web\ Spider|JustView|KWebGet|Lachesis|larbin|LeechFTP|LexiBot|lftp|libwww|likse|Link|Link*Sleuth|LINKS\ ARoMATIZED|LinkWalker|LWP|lwp-trivial|Mag-Net|Magnet|Mac\ Finder|Mag-Net|Mass\ Downloader|MCspider|Memo|Microsoft.URL|MIDown\ tool|Mirror|Missigua\ Locator|Mister\ PiX|MMMtoCrawl\/UrlDispatcherLLL|^Mozilla$|Mozilla.*Indy|Mozilla.*NEWT|Mozilla*MSIECrawler|MS\ FrontPage*|MSFrontPage|MSIECrawler|MSProxy|multithreaddb|nationaldirectory|Navroad|NearSite|NetAnts|NetCarta|NetMechanic|netprospector|NetResearchServer|NetSpider|Net\ Vampire|NetZIP|NetZip\ Downloader|NetZippy|NEWT|NICErsPRO|Ninja|NPBot|Octopus|Offline\ Explorer|Offline\ Navigator|OpaL|Openfind|OpenTextSiteCrawler|OrangeBot|PageGrabber|Papa\ Foto|PackRat|pavuk|pcBrowser|PersonaPilot|Ping|PingALink|Pockey|Proxy|psbot|PSurf|puf|Pump|PushSite|QRVA|RealDownload|Reaper|Recorder|ReGet|replacer|RepoMonkey|Robozilla|Rover|RPT-HTTPClient|Rsync|Scooter|SearchExpress|searchhippo|searchterms\.it|Second\ Street\ Research|Seeker|Shai|Siphon|sitecheck|sitecheck.internetseer.com|SiteSnagger|SlySearch|SmartDownload|snagger|Snake|SpaceBison|Spegla|SpiderBot|sproose|SqWorm|Stripper|Sucker|SuperBot|SuperHTTP|Surfbot|SurfWalker|Szukacz|tAkeOut|tarspider|Teleport\ Pro|Templeton|TrueRobot|TV33_Mercator|UIowaCrawler|UtilMind|URLSpiderPro|URL_Spider_Pro|Vacuum|vagabondo|vayala|visibilitygap|VoidEYE|vspider|Web\ Downloader|w3mir|Web\ Data\ Extractor|Web\ Image\ Collector|Web\ Sucker|Wweb|WebAuto|WebBandit|web\.by\.mail|Webclipping|webcollage|webcollector|WebCopier|webcraft@bea|webdevil|webdownloader|Webdup|WebEMailExtrac|WebFetch|WebGo\ IS|WebHook|Webinator|WebLeacher|WEBMASTERS|WebMiner|WebMirror|webmole|WebReaper|WebSauger|Website|Website\ eXtractor|Website\ Quester|WebSnake|Webster|WebStripper|websucker|webvac|webwalk|webweasel|WebWhacker|WebZIP|Wget|Whacker|whizbang|WhosTalking|Widow|WISEbot|WWWOFFLE|x-Tractor|^Xaldon\ WebSpider|WUMPUS|Xenu|XGET|Zeus.*Webster|Zeus [NC]
+RewriteRule ^.* - [F,L]
+
+#new added
+
+RewriteEngine on
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+# Note: It’s also recommended to enable HTTP Strict Transport Security (HSTS)
+# on your HTTPS website to help prevent man-in-the-middle attacks.
+# See https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security
+<IfModule mod_headers.c>
+    # Remove "includeSubDomains" if you don't want to enforce HSTS on all subdomains
+    Header always set Strict-Transport-Security "max-age=31536000;includeSubDomains"
+</IfModule>
+
+#for ip access
+
+## Apache 2.2
+#Order deny,allow
+#Deny from all
+#Allow from xxx.xxx.xxx.xxx
+
+##Apache 2.4
+# Require all denied
+# Require ip xxx.xxx.xxx.xxx
+
+#Deny Access to Hidden Files and Directories
+
+RewriteCond %{SCRIPT_FILENAME} -d [OR]
+RewriteCond %{SCRIPT_FILENAME} -f
+RewriteRule "(^|/)\." - [F]
+
+RedirectMatch 404 /\..*$
+
+#Deny Access to Backup and Source Files
+<FilesMatch "(\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|swp)|~)$">
+    ## Apache 2.2
+    Order allow,deny
+    Deny from all
+    Satisfy All
+
+    ## Apache 2.4
+    # Require all denied
+</FilesMatch>
+
+#Disable Image Hotlinking
+
+RewriteEngine on
+# Remove the following line if you want to block blank referrer too
+RewriteCond %{HTTP_REFERER} !^$
+
+RewriteCond %{HTTP_REFERER} !^https?://(.+\.)?example.com [NC]
+RewriteRule \.(jpe?g|png|gif|bmp)$ - [NC,F,L]
+
+# If you want to display a “blocked” banner in place of the hotlinked image,
+# replace the above rule with:
+# RewriteRule \.(jpe?g|png|gif|bmp) http://example.com/blocked.png [R,L]
+
+#Prevent Framing the Site
+
+SetEnvIf Request_URI "/starry-night" allow_framing=true
+Header set X-Frame-Options SAMEORIGIN env=!allow_framing
+
+#Compress Text Files
+
+<IfModule mod_deflate.c>
+
+    # Force compression for mangled headers.
+    # https://developer.yahoo.com/blogs/ydn/pushing-beyond-gzipping-25601.html
+    <IfModule mod_setenvif.c>
+        <IfModule mod_headers.c>
+            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+            RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+        </IfModule>
+    </IfModule>
+
+    # Compress all output labeled with one of the following MIME-types
+    # (for Apache versions below 2.3.7, you don't need to enable `mod_filter`
+    #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
+    #  as `AddOutputFilterByType` is still in the core directives).
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE application/atom+xml \
+                                      application/javascript \
+                                      application/json \
+                                      application/rss+xml \
+                                      application/vnd.ms-fontobject \
+                                      application/x-font-ttf \
+                                      application/x-web-app-manifest+json \
+                                      application/xhtml+xml \
+                                      application/xml \
+                                      font/opentype \
+                                      image/svg+xml \
+                                      image/x-icon \
+                                      text/css \
+                                      text/html \
+                                      text/plain \
+                                      text/x-component \
+                                      text/xml
+    </IfModule>
+
+</IfModule>
+
+#Custom Error Pages
+
+ErrorDocument 500 "Houston, we have a problem."
+ErrorDocument 401 http://error.example.com/mordor.html
+ErrorDocument 404 /errors/error.html
+
+#Prevent Downloading
+
+<FilesMatch "\.(tex|log|aux)$">
+    Header set Content-Type text/plain
+</FilesMatch>
+
+#for Allow Cross-Domain Fonts
+<IfModule mod_headers.c>
+    <FilesMatch "\.(eot|otf|ttc|ttf|woff|woff2)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+
